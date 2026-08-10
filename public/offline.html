@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1e17" />
+  <title>Sin conexión · GAM San Matías</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap');
+
+    html, body {
+      min-height: 100dvh;
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: #0d1e17;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .icon {
+      width: 80px; height: 80px;
+      border-radius: 22px;
+      margin: 0 auto 2rem;
+      display: block;
+    }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 99px;
+      background: rgba(255,255,255,0.06);
+      padding: 0.375rem 1rem;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 1.5rem;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #f97316;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1 }
+      50% { opacity: 0.3 }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      max-width: 38ch;
+      margin: 0 auto 2.5rem;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 99px;
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.75rem 1.75rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: rgba(255,255,255,0.18) }
+
+    .tips {
+      margin-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 2rem;
+      display: grid;
+      gap: 0.75rem;
+      max-width: 320px;
+      margin-inline: auto;
+    }
+    .tip {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      text-align: left; font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    }
+    .tip-num {
+      min-width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: grid; place-items: center;
+      font-size: 0.65rem; font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <img src="/icon-192.png" alt="GAM San Matías" class="icon" />
+
+    <div class="badge">
+      <span class="dot"></span>
+      Sin conexión a internet
+    </div>
+
+    <h1>Sin conexión<br />por ahora</h1>
+
+    <p>
+      El portal municipal requiere conexión para cargar información actualizada.
+      Algunas páginas visitadas anteriormente pueden estar disponibles en caché.
+    </p>
+
+    <button onclick="window.location.reload()" class="btn">
+      ↻ Intentar de nuevo
+    </button>
+
+    <div class="tips">
+      <p style="font-size:0.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin:0 0 0.25rem">
+        Mientras tanto
+      </p>
+      <div class="tip">
+        <span class="tip-num">1</span>
+        <span>Verifique su conexión Wi-Fi o datos móviles</span>
+      </div>
+      <div class="tip">
+        <span class="tip-num">2</span>
+        <span>Revise si el modo avión está activado</span>
+      </div>
+      <div class="tip">
+        <span class="tip-num">3</span>
+        <span>Llame al GAM San Matías al +591 3 XXX-XXXX</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

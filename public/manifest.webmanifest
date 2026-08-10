@@ -1,0 +1,41 @@
+{
+  "name": "Portal Ciudadano · San Matías",
+  "short_name": "San Matías",
+  "description": "Servicios, transparencia y denuncias ciudadanas del Gobierno Autónomo Municipal de San Matías.",
+  "lang": "es-BO",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4f1e9",
+  "theme_color": "#0d1e17",
+  "categories": ["government", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Reportar un problema",
+      "short_name": "Reportar",
+      "url": "/denuncias?source=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Seguir mi ticket",
+      "short_name": "Seguimiento",
+      "url": "/denuncias/seguimiento?ticket=",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+node_modules/
+.output/
+.tanstack/
+dist/
+.env.local
+.env.*.local
+src/routeTree.gen.ts
+*.log
+artifacts-*.png
+.DS_Store
+public/uploads/*
+!public/uploads/.gitkeep
