@@ -73,11 +73,9 @@ debe rotarse antes de publicar el sistema.
 Configure en Vercel las variables documentadas en `.env.example`, usando una
 clave `service_role` nueva. No copie `.env.local` al repositorio.
 
-La carga de imágenes está configurada actualmente para almacenamiento local en
-`public/uploads`, tal como requiere la instalación municipal local. El sistema
-de archivos de Vercel no es persistente para cargas en tiempo de ejecución; antes
-de habilitar el CMS en Vercel debe conectarse este módulo a un almacenamiento
-persistente como Vercel Blob o Supabase Storage.
+La carga de imágenes utiliza `public/uploads` durante el desarrollo local. En
+Vercel, el sistema detecta automáticamente el entorno y utiliza el bucket
+`public-media` de Supabase Storage para conservar los archivos entre despliegues.
 
 ## Activos visuales
 
