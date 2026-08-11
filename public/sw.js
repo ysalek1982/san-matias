@@ -3,13 +3,15 @@
  * Estrategia: Cache-first para assets, Network-first para páginas.
  */
 
-const CACHE_VER = 'gam-v2'
+const CACHE_VER = 'gam-v3'
 const STATIC = `${CACHE_VER}-static`
 const PAGES = `${CACHE_VER}-pages`
 const OFFLINE_URL = '/offline.html'
 
 const PRECACHE = [
   OFFLINE_URL,
+  '/favicon.ico?v=3',
+  '/apple-touch-icon.png?v=3',
   '/icon-192.png',
   '/icon-512.png',
   '/images/la-curicha.jpg',

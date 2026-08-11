@@ -11,11 +11,26 @@ export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
-const jewels = [
+type Jewel = {
+  name: string
+  eyebrow: string
+  image: string
+  className: string
+  link?: string
+}
+
+const defaultJewels: Jewel[] = [
   { name: 'La Curicha', eyebrow: 'Agua natural', image: '/images/la-curicha.jpg', className: 'md:col-span-2 md:row-span-2' },
   { name: 'Pantanal boliviano', eyebrow: 'Humedal vivo', image: '/images/pantanal.png', className: 'md:row-span-2' },
   { name: 'Paraba Azul', eyebrow: 'Fauna emblemática', image: '/images/paraba-azul.png', className: '' },
   { name: 'Laguna Mandioré', eyebrow: 'Frontera de agua', image: '/images/laguna-mandiore.png', className: '' },
+]
+
+const gridClasses = [
+  'md:col-span-2 md:row-span-2',
+  'md:row-span-2',
+  '',
+  '',
 ]
 
 const services = [
@@ -26,7 +41,18 @@ const services = [
 ] as const
 
 function HomePage() {
-  const { works, news } = Route.useLoaderData()
+  const { works, news, banners } = Route.useLoaderData()
+
+  const activeBanners = (banners && banners.length > 0)
+    ? banners.map((b, i) => ({
+        name: b.title,
+        eyebrow: b.eyebrow ?? 'San Matías',
+        image: b.image_url,
+        link: b.link_url ?? undefined,
+        className: gridClasses[i % gridClasses.length] ?? '',
+      }))
+    : defaultJewels
+
   const averageProgress = works.length
     ? Math.round(works.reduce((total, work) => total + work.physical_progress, 0) / works.length)
     : 0
@@ -60,16 +86,28 @@ function HomePage() {
           </div>
 
           <div className="reveal-up-late grid min-h-[620px] gap-3 md:grid-cols-4 md:grid-rows-2">
-            {jewels.map((jewel, index) => (
-              <article key={jewel.name} className={`group relative min-h-64 overflow-hidden rounded-[1.6rem] ring-1 ring-white/10 ${jewel.className}`}>
-                <img src={jewel.image} alt={jewel.name} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" fetchPriority={index === 0 ? 'high' : 'auto'} loading={index === 0 ? 'eager' : 'lazy'} />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-transparent to-black/10" />
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-7">
-                  <div><p className="text-[10px] font-extrabold tracking-[0.2em] text-earth-200 uppercase">{jewel.eyebrow}</p><h2 className="mt-1 font-display text-2xl font-semibold">{jewel.name}</h2></div>
-                  <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/30 bg-white/10 backdrop-blur transition group-hover:bg-white group-hover:text-forest-950"><ArrowRight className="size-4" /></span>
+            {activeBanners.map((jewel, index) => {
+              const content = (
+                <article className={`group relative min-h-64 h-full overflow-hidden rounded-[1.6rem] ring-1 ring-white/10 ${jewel.className}`}>
+                  <img src={jewel.image} alt={jewel.name} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" fetchPriority={index === 0 ? 'high' : 'auto'} loading={index === 0 ? 'eager' : 'lazy'} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-transparent to-black/10" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-7">
+                    <div><p className="text-[10px] font-extrabold tracking-[0.2em] text-earth-200 uppercase">{jewel.eyebrow}</p><h2 className="mt-1 font-display text-2xl font-semibold">{jewel.name}</h2></div>
+                    <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/30 bg-white/10 backdrop-blur transition group-hover:bg-white group-hover:text-forest-950"><ArrowRight className="size-4" /></span>
+                  </div>
+                </article>
+              )
+
+              return jewel.link ? (
+                <a key={`${jewel.name}-${index}`} href={jewel.link} className={`block ${jewel.className}`}>
+                  {content}
+                </a>
+              ) : (
+                <div key={`${jewel.name}-${index}`} className={jewel.className}>
+                  {content}
                 </div>
-              </article>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>

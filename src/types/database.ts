@@ -222,6 +222,18 @@ export type InventoryAsset = {
   updated_at: string
 }
 
+export type HomeBanner = {
+  id: string
+  title: string
+  eyebrow: string | null
+  image_url: string
+  link_url: string | null
+  sort_order: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -447,6 +459,21 @@ export type Database = {
           updated_at?: string
         },
         Partial<Omit<InventoryAsset, 'id' | 'created_at'>>
+      >
+      home_banners: TableDefinition<
+        HomeBanner,
+        {
+          id?: string
+          title: string
+          eyebrow?: string | null
+          image_url: string
+          link_url?: string | null
+          sort_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        },
+        Partial<Omit<HomeBanner, 'id' | 'created_at'>>
       >
     }
     Views: Record<string, never>

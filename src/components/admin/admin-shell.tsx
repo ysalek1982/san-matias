@@ -1,6 +1,6 @@
 import { Link, useRouter } from '@tanstack/react-router'
 import {
-  Archive, Building2, ChevronRight, FileText, History, LayoutDashboard,
+  Archive, Building2, ChevronRight, FileText, History, Image, LayoutDashboard,
   LogOut, Menu, Newspaper, Package, Settings2, UserCog, UsersRound, Wrench,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
@@ -28,6 +28,7 @@ const items: NavItem[] = [
   { to: '/admin/noticias', label: 'Noticias', icon: Newspaper, roles: ['superadmin', 'admin', 'editor'], group: 'Contenido' },
   { to: '/admin/tramites', label: 'Trámites', icon: FileText, roles: ['superadmin', 'admin', 'editor'], group: 'Contenido' },
   { to: '/admin/documentos', label: 'Documentos', icon: Archive, roles: ['superadmin', 'admin', 'editor'], group: 'Contenido' },
+  { to: '/admin/banners', label: 'Banners Portada', icon: Image, roles: ['superadmin', 'admin', 'editor'], group: 'Contenido' },
   // RRHH e Inventario
   { to: '/admin/empleados', label: 'Personal', icon: UsersRound, roles: ['superadmin', 'admin'], group: 'RRHH & Activos' },
   { to: '/admin/contratos', label: 'Contratos', icon: FileText, roles: ['superadmin', 'admin'], group: 'RRHH & Activos' },

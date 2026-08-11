@@ -1,4 +1,4 @@
-import { Pencil, Plus, Trash2, Search, ChevronDown } from 'lucide-react'
+import { Pencil, Plus, Trash2, Search, ChevronDown, Download } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from '@tanstack/react-router'
@@ -68,6 +68,27 @@ export function ResourceManager({
   const [uploading, setUploading] = useState(false)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [search, setSearch] = useState('')
+
+  function exportCSV() {
+    if (!rows || rows.length === 0) {
+      toast.error('No hay datos para exportar')
+      return
+    }
+    const keys = displayKeys.length > 0 ? displayKeys : Object.keys(rows[0] ?? {}).filter((k) => k !== 'id')
+    const headers = keys.join(',')
+    const csvLines = rows.map((row) =>
+      keys.map((k) => `"${String(row[k] ?? '').replace(/"/g, '""')}"`).join(','),
+    )
+    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers, ...csvLines].join('\n')
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement('a')
+    link.setAttribute('href', encodedUri)
+    link.setAttribute('download', `reporte_${resource}_${new Date().toISOString().slice(0, 10)}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    toast.success('Reporte CSV descargado correctamente')
+  }
 
   const emptyValues = useMemo(
     () => ({
@@ -161,10 +182,18 @@ export function ResourceManager({
           <h1 className="mt-1.5 font-display text-4xl font-semibold text-forest-950">{title}</h1>
           <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
         </div>
-        <Button onClick={startCreate} className="shrink-0 rounded-full bg-forest-900 text-white hover:bg-forest-800 shadow-sm">
-          <Plus className="size-4" />
-          Nuevo registro
-        </Button>
+        <div className="flex items-center gap-2">
+          {rows.length > 0 && (
+            <Button onClick={exportCSV} variant="outline" className="rounded-full border-forest-900/15 font-semibold text-forest-900">
+              <Download className="size-4" />
+              Exportar CSV
+            </Button>
+          )}
+          <Button onClick={startCreate} className="shrink-0 rounded-full bg-forest-900 text-white hover:bg-forest-800 shadow-sm">
+            <Plus className="size-4" />
+            Nuevo registro
+          </Button>
+        </div>
       </div>
 
       {/* Search bar */}

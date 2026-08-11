@@ -35,9 +35,10 @@ export const Route = createRootRoute({
     links: [
       { rel: 'stylesheet', href: appCss },
       { rel: 'manifest', href: '/manifest.webmanifest' },
-      { rel: 'icon', href: '/icon-192.png', type: 'image/png' },
-      { rel: 'apple-touch-icon', href: '/icon-192.png' },
-      { rel: 'apple-touch-icon', sizes: '512x512', href: '/icon-512.png' },
+      { rel: 'icon', href: '/favicon.ico?v=3', sizes: 'any' },
+      { rel: 'icon', href: '/icon-192.png?v=3', type: 'image/png' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png?v=3' },
+      { rel: 'apple-touch-icon', sizes: '512x512', href: '/icon-512.png?v=3' },
     ],
   }),
   component: RootComponent,

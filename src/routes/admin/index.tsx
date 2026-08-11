@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import {
-  Activity, Archive, ArrowRight, Building2, Clock3, FileText,
+  Activity, Archive, ArrowRight, Building2, Clock3, FileText, Image as ImageIcon,
   LifeBuoy, Newspaper, Package, Radar, TrendingUp, UsersRound, Wrench,
 } from 'lucide-react'
 
@@ -21,6 +21,7 @@ function DashboardPage() {
     { key: 'authorities', label: 'Autoridades', icon: UsersRound, to: '/admin/autoridades', color: 'bg-purple-100 text-purple-700' },
     { key: 'documents', label: 'Documentos', icon: Archive, to: '/admin/documentos', color: 'bg-amber-100 text-amber-700' },
     { key: 'procedures', label: 'Trámites', icon: FileText, to: '/admin/tramites', color: 'bg-teal-100 text-teal-700' },
+    { key: 'banners', label: 'Banners', icon: ImageIcon, to: '/admin/banners', color: 'bg-indigo-100 text-indigo-700' },
     { key: 'complaints', label: 'Denuncias', icon: LifeBuoy, to: '/admin/denuncias', color: 'bg-red-100 text-red-700' },
   ] as const
 
@@ -73,7 +74,7 @@ function DashboardPage() {
         <p className="mb-4 flex items-center gap-2 text-[10px] font-extrabold tracking-[.15em] text-muted-foreground uppercase">
           <Activity className="size-3.5" /> Contenido publicado
         </p>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
           {contentStats.map(({ key, label, icon: Icon, to, color }) => (
             <Link
               key={key}

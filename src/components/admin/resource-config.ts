@@ -68,3 +68,12 @@ export const inventoryAssetFields: ResourceField[] = [
   { key: 'location', label: 'Ubicación / Oficina' },
   { key: 'assigned_to', label: 'ID del Empleado Responsable (UUID, opcional)' }
 ]
+
+export const homeBannerFields: ResourceField[] = [
+  { key: 'title', label: 'Título del Banner (ej. La Curicha)', required: true },
+  { key: 'eyebrow', label: 'Subtítulo / Etiqueta (ej. Agua natural)' },
+  { key: 'image_url', label: 'Imagen de portada', type: 'image', required: true },
+  { key: 'link_url', label: 'Enlace al hacer clic (opcional, ej. /turismo)' },
+  { key: 'sort_order', label: 'Orden de aparición', type: 'number', defaultValue: '1' },
+  { key: 'is_active', label: 'Visibilidad', type: 'select', defaultValue: 'true', options: [{ value: 'true', label: 'Activo' }, { value: 'false', label: 'Oculto' }] },
+]

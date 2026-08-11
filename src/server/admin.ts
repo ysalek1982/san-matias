@@ -4,7 +4,7 @@ import { createAdminServerClient } from '@/lib/supabase/admin.server'
 import { createAuthenticatedServerClient } from '@/lib/supabase/server'
 import type { CmsRole, ComplaintStatus, Json } from '@/types/database'
 
-export type AdminResource = 'works' | 'authorities' | 'news' | 'documents' | 'procedures' | 'hr_employees' | 'hr_contracts' | 'inventory_assets'
+export type AdminResource = 'works' | 'authorities' | 'news' | 'documents' | 'procedures' | 'hr_employees' | 'hr_contracts' | 'inventory_assets' | 'home_banners'
 async function requireStaff(roles: CmsRole[] = ['superadmin', 'admin', 'editor', 'helpdesk']) {
   const supabase = createAuthenticatedServerClient()
   const { data: authData, error: authError } = await supabase.auth.getUser()
@@ -25,7 +25,7 @@ export const getCurrentAdmin = createServerFn({ method: 'GET' }).handler(async (
 
 export const getAdminDashboard = createServerFn({ method: 'GET' }).handler(async () => {
   const { supabase } = await requireStaff()
-  const [works, authorities, news, documents, complaints, openComplaints, reviewComplaints, employees, assets, procedures] = await Promise.all([
+  const [works, authorities, news, documents, complaints, openComplaints, reviewComplaints, employees, assets, procedures, banners] = await Promise.all([
     supabase.from('works').select('*', { count: 'exact', head: true }),
     supabase.from('authorities').select('*', { count: 'exact', head: true }),
     supabase.from('news').select('*', { count: 'exact', head: true }),
@@ -36,6 +36,7 @@ export const getAdminDashboard = createServerFn({ method: 'GET' }).handler(async
     supabase.from('hr_employees').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('inventory_assets').select('*', { count: 'exact', head: true }),
     supabase.from('procedures').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+    supabase.from('home_banners').select('*', { count: 'exact', head: true }),
   ])
   const { count: complaintsCount } = await supabase.from('complaints').select('*', { count: 'exact', head: true })
   return {
@@ -50,6 +51,7 @@ export const getAdminDashboard = createServerFn({ method: 'GET' }).handler(async
       employees: employees.count ?? 0,
       assets: assets.count ?? 0,
       procedures: procedures.count ?? 0,
+      banners: banners.count ?? 0,
     },
     recentComplaints: complaints.data ?? [],
   }
@@ -66,6 +68,7 @@ export const getAdminResource = createServerFn({ method: 'GET' })
     if (input.resource === 'hr_employees') { const result = await supabase.from('hr_employees').select('*').order('created_at', { ascending: false }); if (result.error) throw result.error; return result.data }
     if (input.resource === 'hr_contracts') { const result = await supabase.from('hr_contracts').select('*, hr_employees(first_name, last_name)').order('created_at', { ascending: false }); if (result.error) throw result.error; return result.data }
     if (input.resource === 'inventory_assets') { const result = await supabase.from('inventory_assets').select('*, hr_employees(first_name, last_name)').order('created_at', { ascending: false }); if (result.error) throw result.error; return result.data }
+    if (input.resource === 'home_banners') { const result = await supabase.from('home_banners').select('*').order('sort_order', { ascending: true }); if (result.error) throw result.error; return result.data }
     const result = await supabase.from('documents').select('*').order('fiscal_year', { ascending: false }); if (result.error) throw result.error; return result.data
   })
 
@@ -87,7 +90,7 @@ export const saveAdminResource = createServerFn({ method: 'POST' })
       const payload = { slug: str(input.values, 'slug'), title: str(input.values, 'title'), excerpt: str(input.values, 'excerpt'), body: str(input.values, 'body'), category: str(input.values, 'category') as 'Salud' | 'Turismo' | 'Educación', cover_image_url: optional(input.values, 'cover_image_url'), status: str(input.values, 'status') as 'draft' | 'published' | 'archived', published_at: str(input.values, 'status') === 'published' ? new Date().toISOString() : null }
       const result = input.id ? await supabase.from('news').update({ ...payload, updated_by: user.id }).eq('id', input.id) : await supabase.from('news').insert({ ...payload, created_by: user.id, updated_by: user.id }); if (result.error) throw result.error
     } else if (input.resource === 'procedures') {
-      const payload = { title: str(input.values, 'title'), description: optional(input.values, 'description'), requirements: input.values.requirements ? String(input.values.requirements).split('\\n') : null, cost: num(input.values, 'cost') || null, estimated_duration: optional(input.values, 'estimated_duration'), category: str(input.values, 'category'), status: str(input.values, 'status') as 'draft' | 'published' | 'archived', published_at: str(input.values, 'status') === 'published' ? new Date().toISOString() : null }
+      const payload = { title: str(input.values, 'title'), description: optional(input.values, 'description'), requirements: input.values.requirements ? String(input.values.requirements).split('\n') : null, cost: num(input.values, 'cost') || null, estimated_duration: optional(input.values, 'estimated_duration'), category: str(input.values, 'category'), status: str(input.values, 'status') as 'draft' | 'published' | 'archived', published_at: str(input.values, 'status') === 'published' ? new Date().toISOString() : null }
       const result = input.id ? await supabase.from('procedures').update({ ...payload, updated_by: user.id }).eq('id', input.id) : await supabase.from('procedures').insert({ ...payload, created_by: user.id, updated_by: user.id }); if (result.error) throw result.error
     } else if (input.resource === 'hr_employees') {
       const payload = { identity_document: str(input.values, 'identity_document'), first_name: str(input.values, 'first_name'), last_name: str(input.values, 'last_name'), email: optional(input.values, 'email'), phone: optional(input.values, 'phone'), date_of_birth: optional(input.values, 'date_of_birth'), address: optional(input.values, 'address'), status: str(input.values, 'status') as 'active' | 'inactive' | 'suspended' }
@@ -98,6 +101,9 @@ export const saveAdminResource = createServerFn({ method: 'POST' })
     } else if (input.resource === 'inventory_assets') {
       const payload = { asset_code: str(input.values, 'asset_code'), name: str(input.values, 'name'), description: optional(input.values, 'description'), category: str(input.values, 'category') as 'vehículo' | 'equipo_computo' | 'mueble' | 'inmueble' | 'maquinaria' | 'otro', status: str(input.values, 'status') as 'operativo' | 'mantenimiento' | 'de_baja', acquisition_date: optional(input.values, 'acquisition_date'), acquisition_cost: num(input.values, 'acquisition_cost') || 0, location: optional(input.values, 'location'), assigned_to: optional(input.values, 'assigned_to') }
       const result = input.id ? await supabase.from('inventory_assets').update({ ...payload }).eq('id', input.id) : await supabase.from('inventory_assets').insert({ ...payload }); if (result.error) throw result.error
+    } else if (input.resource === 'home_banners') {
+      const payload = { title: str(input.values, 'title'), eyebrow: optional(input.values, 'eyebrow'), image_url: str(input.values, 'image_url'), link_url: optional(input.values, 'link_url'), sort_order: num(input.values, 'sort_order'), is_active: input.values.is_active === 'true' || input.values.is_active === '1' }
+      const result = input.id ? await supabase.from('home_banners').update(payload).eq('id', input.id) : await supabase.from('home_banners').insert(payload); if (result.error) throw result.error
     } else {
       const payload = { title: str(input.values, 'title'), description: optional(input.values, 'description'), category: str(input.values, 'category') as 'POA' | 'Resolución', document_number: optional(input.values, 'document_number'), fiscal_year: num(input.values, 'fiscal_year'), file_path: str(input.values, 'file_path'), file_name: str(input.values, 'file_name'), mime_type: 'application/pdf', status: str(input.values, 'status') as 'draft' | 'published' | 'archived', published_at: str(input.values, 'status') === 'published' ? new Date().toISOString() : null }
       const result = input.id ? await supabase.from('documents').update({ ...payload, updated_by: user.id }).eq('id', input.id) : await supabase.from('documents').insert({ ...payload, created_by: user.id, updated_by: user.id }); if (result.error) throw result.error
@@ -116,6 +122,7 @@ export const deleteAdminResource = createServerFn({ method: 'POST' })
     else if (input.resource === 'hr_employees') { const { error } = await supabase.from('hr_employees').delete().eq('id', input.id); if (error) throw error }
     else if (input.resource === 'hr_contracts') { const { error } = await supabase.from('hr_contracts').delete().eq('id', input.id); if (error) throw error }
     else if (input.resource === 'inventory_assets') { const { error } = await supabase.from('inventory_assets').delete().eq('id', input.id); if (error) throw error }
+    else if (input.resource === 'home_banners') { const { error } = await supabase.from('home_banners').delete().eq('id', input.id); if (error) throw error }
     else { const { error } = await supabase.from('documents').delete().eq('id', input.id); if (error) throw error }
     return { ok: true }
   })

@@ -8,13 +8,14 @@ function assertNoError(error: { message: string } | null, context: string): void
 
 export const getHomeData = createServerFn({ method: 'GET' }).handler(async () => {
   const supabase = createPublicServerClient()
-  const [works, news] = await Promise.all([
+  const [works, news, banners] = await Promise.all([
     supabase.from('works').select('*').order('published_at', { ascending: false }).limit(3),
     supabase.from('news').select('*').order('published_at', { ascending: false }).limit(3),
+    supabase.from('home_banners').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
   ])
   assertNoError(works.error, 'No se pudieron cargar las obras')
   assertNoError(news.error, 'No se pudieron cargar las noticias')
-  return { works: works.data ?? [], news: news.data ?? [] }
+  return { works: works.data ?? [], news: news.data ?? [], banners: banners.data ?? [] }
 })
 
 export const getAuthorities = createServerFn({ method: 'GET' }).handler(async () => {
