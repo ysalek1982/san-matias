@@ -25,7 +25,7 @@ export function Navbar() {
     <>
       <div className="bg-forest-950 px-4 py-2 text-[10px] font-bold tracking-[0.13em] text-white/70 uppercase">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-          <span>Gobierno Autónomo Municipal <span className="text-white/30">·</span> Santa Cruz, Bolivia</span>
+          <span>Gobierno Autónomo Municipal de San Matías</span>
           <span className="hidden items-center gap-2 text-sky-200 sm:flex"><i className="status-pulse size-1.5 rounded-full bg-sky-300" /> Servicios digitales activos</span>
         </div>
       </div>
