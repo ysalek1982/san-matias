@@ -9,7 +9,6 @@ import type { ReactNode } from 'react'
 import { useEffect } from 'react'
 
 import { PublicLayout } from '@/components/layout/public-layout'
-import { PWAInstallBanner } from '@/components/pwa-install-banner'
 import { Toaster } from '@/components/ui/sonner'
 import appCss from '@/styles/app.css?url'
 
@@ -67,7 +66,6 @@ function RootComponent() {
         </PublicLayout>
       )}
       <Toaster richColors position="top-right" />
-      {!isInstitutional && <PWAInstallBanner />}
     </RootDocument>
   )
 }

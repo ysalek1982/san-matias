@@ -18,10 +18,6 @@ export function InstallPrompt() {
   const [dismissed, setDismissed] = useState(true)
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => undefined)
-    }
-
     const standalone = window.matchMedia('(display-mode: standalone)').matches
       || (navigator as NavigatorWithStandalone).standalone === true
     if (standalone || sessionStorage.getItem('pwa-install-dismissed') === '1') return
