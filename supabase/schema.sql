@@ -133,6 +133,21 @@ create table if not exists public.documents (
 create index if not exists documents_public_list_idx
   on public.documents (status, fiscal_year desc, category);
 
+create table if not exists public.home_banners (
+  id uuid primary key default extensions.gen_random_uuid(),
+  title text not null check (char_length(title) between 2 and 160),
+  eyebrow text,
+  image_url text not null,
+  link_url text,
+  sort_order integer not null default 1,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists home_banners_public_list_idx
+  on public.home_banners (is_active, sort_order);
+
 create table if not exists public.complaint_ticket_counters (
   ticket_year smallint primary key check (ticket_year between 2020 and 2100),
   last_value integer not null default 0 check (last_value >= 0)
@@ -245,7 +260,7 @@ $$;
 do $$
 declare table_name text;
 begin
-  foreach table_name in array array['profiles', 'authorities', 'works', 'news', 'documents', 'complaint_categories', 'complaints']
+  foreach table_name in array array['profiles', 'authorities', 'works', 'news', 'documents', 'home_banners', 'complaint_categories', 'complaints']
   loop
     execute format('drop trigger if exists set_%I_updated_at on public.%I', table_name, table_name);
     execute format(
@@ -383,6 +398,7 @@ alter table public.authorities enable row level security;
 alter table public.works enable row level security;
 alter table public.news enable row level security;
 alter table public.documents enable row level security;
+alter table public.home_banners enable row level security;
 alter table public.complaint_ticket_counters enable row level security;
 alter table public.complaint_categories enable row level security;
 alter table public.cms_audit_logs enable row level security;
@@ -438,6 +454,14 @@ create policy "documents_cms_all"
   using ((select private.has_cms_role(array['superadmin', 'admin', 'editor']::public.cms_role[])))
   with check ((select private.has_cms_role(array['superadmin', 'admin', 'editor']::public.cms_role[])));
 
+create policy "home_banners_public_read"
+  on public.home_banners for select to anon, authenticated
+  using (is_active);
+create policy "home_banners_cms_all"
+  on public.home_banners for all to authenticated
+  using ((select private.has_cms_role(array['superadmin', 'admin', 'editor']::public.cms_role[])))
+  with check ((select private.has_cms_role(array['superadmin', 'admin', 'editor']::public.cms_role[])));
+
 create policy "complaint_categories_public_read"
   on public.complaint_categories for select to anon, authenticated
   using (is_active);
@@ -481,17 +505,18 @@ revoke all on table
   public.works,
   public.news,
   public.documents,
+  public.home_banners,
   public.complaint_ticket_counters,
   public.complaint_categories,
   public.cms_audit_logs,
   public.complaints,
   public.complaint_updates
 from anon, authenticated;
-grant select on public.authorities, public.works, public.news, public.documents, public.complaint_categories to anon, authenticated;
+grant select on public.authorities, public.works, public.news, public.documents, public.home_banners, public.complaint_categories to anon, authenticated;
 grant select on public.profiles to authenticated;
 grant select on public.cms_audit_logs to authenticated;
 grant insert, update, delete on public.profiles to authenticated;
-grant insert, update, delete on public.authorities, public.works, public.news, public.documents to authenticated;
+grant insert, update, delete on public.authorities, public.works, public.news, public.documents, public.home_banners to authenticated;
 grant insert, update, delete on public.complaint_categories to authenticated;
 grant select, update on public.complaints to authenticated;
 grant select, insert, update, delete on public.complaint_updates to authenticated;
