@@ -24,7 +24,6 @@ export function Footer() {
           <p className="text-xs font-extrabold tracking-[0.17em] text-earth-300 uppercase">Accesos</p>
           <div className="mt-5 grid gap-3 text-sm text-white/70">
             <Link to="/" className="hover:text-white">Inicio</Link>
-            <Link to="/turismo" className="hover:text-white">Turismo & ANMI</Link>
             <Link to="/obras" className="hover:text-white">Obras municipales</Link>
             <Link to="/tramites" className="hover:text-white">Trámites y servicios</Link>
             <Link to="/documentos" className="hover:text-white">Transparencia</Link>

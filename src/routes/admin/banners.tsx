@@ -15,8 +15,8 @@ function BannersPage() {
 
   return (
     <ResourceManager
-      title="Banners de la Portada"
-      description="Administre las tarjetas y banners destacados que se muestran en el hero de la página de inicio."
+      title="Portada y atractivos"
+      description="Administre desde aquí las imágenes, títulos, enlaces y el orden de los atractivos que aparecen en la página de inicio."
       resource="home_banners"
       rows={rows}
       fields={homeBannerFields}

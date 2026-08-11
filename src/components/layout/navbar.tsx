@@ -13,7 +13,6 @@ import {
 
 const links = [
   { to: '/', label: 'Inicio' },
-  { to: '/turismo', label: 'Turismo & ANMI' },
   { to: '/autoridades', label: 'Autoridades' },
   { to: '/obras', label: 'Obras' },
   { to: '/noticias', label: 'Noticias' },
