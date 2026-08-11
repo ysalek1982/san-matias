@@ -352,6 +352,7 @@ export function ResourceManager({
                   <ImageUpload
                     value={values[field.key] ?? ''}
                     file={imageFile}
+                    aspect={resource === 'authorities' ? 'portrait' : 'landscape'}
                     disabled={pending}
                     uploading={uploading}
                     onFile={(file) => {

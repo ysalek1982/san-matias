@@ -16,7 +16,7 @@ export const workFields: ResourceField[] = [
 export const authorityFields: ResourceField[] = [
   { key: 'full_name', label: 'Nombre completo', required: true }, { key: 'position', label: 'Cargo', required: true },
   { key: 'authority_type', label: 'Tipo', type: 'select', defaultValue: 'directivo', options: [{ value: 'alcalde', label: 'Alcalde' }, { value: 'concejal', label: 'Concejal' }, { value: 'directivo', label: 'Directivo' }, { value: 'unidad', label: 'Unidad' }] },
-  { key: 'organization_area', label: 'Área institucional' }, { key: 'biography', label: 'Reseña', type: 'textarea' }, { key: 'photo_url', label: 'Fotografía de perfil', type: 'image' },
+  { key: 'organization_area', label: 'Área institucional' }, { key: 'biography', label: 'Reseña', type: 'textarea' }, { key: 'photo_url', label: 'Fotografía de perfil', type: 'image', hint: 'Use una fotografía vertical 4:5 o una composición cuadrada con buena resolución. El sistema conservará sus proporciones.' },
   { key: 'sort_order', label: 'Orden', type: 'number', defaultValue: '0' }, { key: 'status', label: 'Publicación', type: 'select', defaultValue: 'draft', options: publicationOptions },
 ]
 
